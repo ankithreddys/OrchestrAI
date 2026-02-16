@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Ankith Sharma",
+    "email": "ankith.sharma@example.com",
+    "phone": "+1 555-0101"
+  },
+  {
+    "name": "Ankit Gupta",
+    "email": "ankit.gupta@example.com",
+    "phone": "+1 555-0102"
+  },
+  {
+    "name": "Ankitha Rao",
+    "email": "ankitha.rao@example.com",
+    "phone": "+1 555-0103"
+  }
+]

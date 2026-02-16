@@ -1,0 +1,11 @@
+gradio>=4.0.0
+python-dotenv
+langgraph
+langchain
+langchain-core
+langchain-openai
+O365
+google-auth-oauthlib
+google-api-python-client
+SpeechRecognition
+email-validator
