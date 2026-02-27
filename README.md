@@ -363,15 +363,15 @@ The `name` field is supported for backward compatibility. Fuzzy matching uses fi
 
 ```
 User: Send an email to Amogh
-Assistant: I found Amogh Padakanti (amoghpadakanti@ufl.edu). Could you provide the subject and body?
+Assistant: I found Amogh Padakanti (amoghp@ufl.edu). Could you provide the subject and body?
 User: Subject is project update, body is let's sync up tomorrow at 2pm
 Assistant: Here are the details:
-  To: amoghpadakanti@ufl.edu
+  To: amoghp@ufl.edu
   Subject: Project Update
   Body: Hi Amogh, Let's sync up tomorrow at 2:00 PM...
   Please confirm to send or cancel.
 User: confirm
-Assistant: Email sent successfully to amoghpadakanti@ufl.edu!
+Assistant: Email sent successfully to amoghp@ufl.edu!
 ```
 
 ### Email + calendar auto-detection
@@ -390,8 +390,8 @@ User: Send email to Pranay
 Assistant: I couldn't find Pranay in your contacts. Would you like to create a new contact or provide a different recipient?
 User: Yes, create the contact
 Assistant: Please provide first name, last name, email, and phone number.
-User: Pranay Pullaigari, pullaiahgarip@ufl.edu, 3527215494
-Assistant: Contact saved! The email will go to pullaiahgarip@ufl.edu. What's the subject and body?
+User: Pranay P, pranayp@ufl.edu, 352*******
+Assistant: Contact saved! The email will go to pranayp@ufl.edu. What's the subject and body?
 ```
 
 ---
