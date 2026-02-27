@@ -1,3 +1,4 @@
+import logging
 import os
 import pickle
 
@@ -7,6 +8,8 @@ from googleapiclient.discovery import build
 from O365 import Account, MSGraphProtocol
 
 from src.orchestrai.schemas.models import CalendarEvent
+
+log = logging.getLogger("orchestrai.calendar")
 
 
 def create_calendar_event(service_provider: str, calendar_details: CalendarEvent) -> str:
@@ -57,15 +60,29 @@ def _create_gmail_event(calendar_details: CalendarEvent):
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
+            log.info("Calendar token expired, attempting refresh…")
+            try:
+                creds.refresh(Request())
+                log.info("Calendar token refreshed successfully.")
+            except Exception as exc:
+                log.warning("Calendar token refresh failed: %s — deleting stale token.", exc)
+                creds = None
+                try:
+                    os.remove(token_file)
+                except OSError:
+                    pass
+
+        if not creds or not creds.valid:
             if not os.path.exists(credentials_file):
                 raise FileNotFoundError(
                     "Missing credentials.json in project root. "
                     "Place Google OAuth client file at C:/PROJECTS/OrchestrAI/credentials.json"
                 )
+            log.info("Starting Calendar OAuth browser flow (run_local_server)…")
             flow = InstalledAppFlow.from_client_secrets_file(credentials_file, scopes)
             creds = flow.run_local_server(port=0)
+            log.info("Calendar OAuth flow completed.")
+
         with open(token_file, "wb") as token:
             pickle.dump(creds, token)
 

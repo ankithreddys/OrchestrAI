@@ -25,10 +25,6 @@ def _normalize(value: str) -> str:
     return "".join(ch.lower() for ch in value if ch.isalnum() or ch.isspace()).strip()
 
 
-def _letters_only(value: str) -> str:
-    return "".join(ch.lower() for ch in value if ch.isalpha())
-
-
 def is_valid_email(value: str) -> bool:
     return bool(EMAIL_REGEX.match((value or "").strip()))
 
@@ -106,20 +102,17 @@ def _score(query: str, candidate: str) -> float:
     if not qn or not cn:
         return 0.0
 
-    seq_ratio = SequenceMatcher(None, qn, cn).ratio()
-
-    q_letters = set(_letters_only(query))
-    c_letters = set(_letters_only(candidate))
-    if not q_letters:
-        letter_coverage = 0.0
-    else:
-        letter_coverage = len(q_letters.intersection(c_letters)) / len(q_letters)
-
-    return max(seq_ratio, letter_coverage)
+    # Use order-aware fuzzy similarity. Unique-letter overlap caused false positives
+    # (e.g. "ankith" matching "padakanti" due to shared letters).
+    return SequenceMatcher(None, qn, cn).ratio()
 
 
 def search_contacts(query: str, threshold: float | None = None) -> list[Contact]:
     """Fuzzy-search contacts by name/email local part with configurable threshold."""
+    normalized_query = _normalize(query)
+    if not normalized_query:
+        return []
+
     min_score = threshold
     if min_score is None:
         try:
@@ -128,6 +121,22 @@ def search_contacts(query: str, threshold: float | None = None) -> list[Contact]
             min_score = 0.7
 
     contacts = load_contacts()
+
+    # Prefer exact field matches first to avoid noisy fuzzy disambiguation.
+    exact_matches: list[Contact] = []
+    for contact in contacts:
+        local_part = contact.email.split("@", 1)[0]
+        fields = (
+            _normalize(contact.first_name),
+            _normalize(contact.last_name),
+            _normalize(contact.name),
+            _normalize(local_part),
+        )
+        if normalized_query in fields:
+            exact_matches.append(contact)
+    if exact_matches:
+        return exact_matches
+
     ranked: list[tuple[float, Contact]] = []
     for contact in contacts:
         local_part = contact.email.split("@", 1)[0]

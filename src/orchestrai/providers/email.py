@@ -1,4 +1,5 @@
 import base64
+import logging
 import os
 import pickle
 from email.mime.text import MIMEText
@@ -9,6 +10,8 @@ from googleapiclient.discovery import build
 from O365 import Account, MSGraphProtocol
 
 from src.orchestrai.schemas.models import EmailContent
+
+log = logging.getLogger("orchestrai.email")
 
 
 def send_email(service_provider: str, email_details: EmailContent) -> str:
@@ -51,15 +54,29 @@ def _send_gmail_email(email_details: EmailContent):
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
+            log.info("Gmail token expired, attempting refresh…")
+            try:
+                creds.refresh(Request())
+                log.info("Gmail token refreshed successfully.")
+            except Exception as exc:
+                log.warning("Gmail token refresh failed: %s — deleting stale token.", exc)
+                creds = None
+                try:
+                    os.remove(token_file)
+                except OSError:
+                    pass
+
+        if not creds or not creds.valid:
             if not os.path.exists(credentials_file):
                 raise FileNotFoundError(
                     "Missing credentials.json in project root. "
                     "Place Google OAuth client file at C:/PROJECTS/OrchestrAI/credentials.json"
                 )
+            log.info("Starting Gmail OAuth browser flow (run_local_server)…")
             flow = InstalledAppFlow.from_client_secrets_file(credentials_file, scopes)
             creds = flow.run_local_server(port=0)
+            log.info("Gmail OAuth flow completed.")
+
         with open(token_file, "wb") as token:
             pickle.dump(creds, token)
 

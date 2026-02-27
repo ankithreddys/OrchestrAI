@@ -1,0 +1,9 @@
+{
+  "dependencies": [
+    "."
+  ],
+  "graphs": {
+    "orchestrai": "./src/orchestrai/graph/builder.py:build_graph"
+  },
+  "env": ".env"
+}

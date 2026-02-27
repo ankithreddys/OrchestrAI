@@ -44,3 +44,4 @@ data/contacts.json
 # LangGraph / app runtime artifacts
 *.sqlite
 *.db
+.langgraph_api/

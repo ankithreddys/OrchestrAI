@@ -1,0 +1,43 @@
+[
+  {
+    "id": "agent_send_email",
+    "conversation": [
+      "Please send an email to amoghpadakanti@ufl.edu.",
+      "Subject should be Weekly Update and body should mention sprint progress and blockers."
+    ],
+    "expected_action": "send_email",
+    "expected_behavior": "Select send_email and include usable email details when enough information is present."
+  },
+  {
+    "id": "agent_create_event",
+    "conversation": [
+      "Create a calendar event titled Team Sync tomorrow from 10am to 11am with amoghpadakanti@ufl.edu."
+    ],
+    "expected_action": "create_calendar_event",
+    "expected_behavior": "Select create_calendar_event and include valid structured calendar fields when meeting details are clear."
+  },
+  {
+    "id": "agent_both_email_and_event",
+    "conversation": [
+      "Email amoghpadakanti@ufl.edu to confirm our meeting tomorrow at 10am for one hour and also create the event."
+    ],
+    "expected_action": "both",
+    "expected_behavior": "Select both when the user explicitly asks for both email and calendar actions."
+  },
+  {
+    "id": "agent_needs_clarification",
+    "conversation": [
+      "Send something to Alex"
+    ],
+    "expected_action": "ask_for_clarification",
+    "expected_behavior": "Ask for clarification when recipient or message details are too incomplete for safe execution."
+  },
+  {
+    "id": "agent_none_out_of_scope",
+    "conversation": [
+      "What is the weather in New York right now?"
+    ],
+    "expected_action": "none",
+    "expected_behavior": "Select none for requests outside email/calendar scope."
+  }
+]

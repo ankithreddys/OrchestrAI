@@ -1,0 +1,26 @@
+[
+  {
+    "id": "email_confirmation_flow",
+    "service_provider": "gmail",
+    "input": "Please send an email to amoghpadakanti@ufl.edu about weekly project status updates.",
+    "expected_output": "The assistant should stage an email, summarize recipient and draft details, and ask the user to confirm or cancel before execution."
+  },
+  {
+    "id": "unknown_contact_capture",
+    "service_provider": "gmail",
+    "input": "Send an email to Taylor Testperson saying we should sync tomorrow morning.",
+    "expected_output": "If the contact does not exist, the assistant should ask whether to create the contact and require a yes/no response before proceeding."
+  },
+  {
+    "id": "contact_lookup",
+    "service_provider": "gmail",
+    "input": "Get details of amogh",
+    "expected_output": "The assistant should return contact details if found, or clearly state not found and offer to create the contact."
+  },
+  {
+    "id": "out_of_scope_request",
+    "service_provider": "gmail",
+    "input": "hello there",
+    "expected_output": "The assistant should guide the user to email/calendar capabilities or ask for a clearer task."
+  }
+]

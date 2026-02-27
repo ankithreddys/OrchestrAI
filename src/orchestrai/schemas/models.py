@@ -62,6 +62,26 @@ class EmailDraftAutofill(BaseModel):
     body: Optional[str] = None
 
 
+class AgentResponse(BaseModel):
+    """LLM-generated user-facing message."""
+
+    message: str = Field(..., description="The natural-language response to show the user.")
+
+
 class ContactLookupIntent(BaseModel):
     intent: Literal["lookup_contact", "other"] = "other"
     query: Optional[str] = None
+
+
+class PendingStateRoute(BaseModel):
+    action: Literal[
+        "confirm",
+        "cancel",
+        "pause",
+        "greet",
+        "create",
+        "provide_details",
+        "alternate_recipient",
+        "other",
+    ] = "other"
+    recipient_candidate: Optional[str] = None
