@@ -346,9 +346,9 @@ $env:OPENAI_API_KEY="..."   # DeepEval judge key
 [
   {
     "first_name": "Amogh",
-    "last_name": "Padakanti",
-    "email": "amoghpadakanti@ufl.edu",
-    "phone": "3527570959"
+    "last_name": "P",
+    "email": "amoghp@ufl.edu",
+    "phone": "352********"
   }
 ]
 ```
